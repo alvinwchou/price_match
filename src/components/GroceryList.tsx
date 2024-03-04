@@ -6,8 +6,8 @@ type GroceryListProps = {
   itemName: string;
 };
 
-export default function GrocerList({ id, itemName }: GroceryListProps) {
-  // this functoin takes an argument, which is the ID of the grocery item we want to remove
+export default function GroceryList({ id, itemName }: GroceryListProps) {
+  // this function takes an argument, which is the ID of the grocery item we want to remove
   const handleRemoveGroceryItem = (groceryItemId: string) => {
     console.log(groceryItemId);
 

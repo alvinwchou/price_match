@@ -5,6 +5,7 @@ import firebase from "../../firebase";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import GroceryList from "@/components/GroceryList";
+import OnSaleList from "@/components/OnSaleList";
 
 type GroceryItem = {
   key: string
@@ -45,14 +46,28 @@ export default function Dashboard() {
         <h1>PRICE MATCH</h1>
       </header>
       <div className="border rounded my-10 bg-white w-1/2 mx-auto shadow-2xl">
-        <Link href="/addGroceryItem" className="">
-          Add a Grocery Item
-        </Link>
+        <h2>Grocery List</h2>
         <ul className="border bg-white rounded">
           {groceryList.map((groceryItem) => {
             return (
               <GroceryList
                 key={groceryItem.key}
+                id={groceryItem.key}
+                itemName={groceryItem.itemName}
+              />
+            );
+          })}
+        </ul>
+        <Link href="/addGroceryItem" className="">
+          Add a Grocery Item
+        </Link>
+      </div>
+      <div className="border rounded my-10 bg-white w-1/2 mx-auto shadow-2xl">
+        <h2>Grocery on Sale</h2>
+        <ul className="border bg-white rounded">
+          {groceryList.map((groceryItem) => {
+            return (
+              <OnSaleList
                 id={groceryItem.key}
                 itemName={groceryItem.itemName}
               />
