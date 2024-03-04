@@ -23,6 +23,7 @@ export default function Home() {
         is to limit which store we are comparing our grocery items. Since some
         locations have restrictions. User Auth.
       </p>
+      <p>Currently using axios to fetch API, will comeback and try new fetch from nextjs</p>
       <br></br>
       <Link href="/dashboard">Go to Dashboard</Link>
     </>
