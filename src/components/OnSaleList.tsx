@@ -1,12 +1,6 @@
 import axios, { AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
-
-// define type for onSaleItem we expect to receive from API
-type OnSaleItem = {
-  name: string;
-  current_price: number;
-  merchant_name: string;
-};
+import OnSaleItem from "./OnSaleItem";
 
 type OnSaleList = {
   itemName: string;
@@ -30,11 +24,7 @@ export default function OnSaleList({ itemName }: OnSaleList) {
       <ul>
         {onSaleItems.map((onSaleItem, index) => {
           return (
-            <li key={index}>
-              <p>{onSaleItem.name}</p>
-              <p>{onSaleItem.current_price}</p>
-              <p>{onSaleItem.merchant_name}</p>
-            </li>
+            <OnSaleItem key={index} {...onSaleItem}/>
           );
         })}
       </ul>
