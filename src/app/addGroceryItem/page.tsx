@@ -13,7 +13,7 @@ export default function AddGroceryItem() {
     setUserInput(e.target.value);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     //create a reference to our db

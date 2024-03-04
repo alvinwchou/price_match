@@ -6,8 +6,13 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import GroceryList from "@/components/GroceryList";
 
+type GroceryItem = {
+  key: string
+  itemName: string
+}
+
 export default function Dashboard() {
-  const [groceryList, setGroceryList] = useState([]);
+  const [groceryList, setGroceryList] = useState<GroceryItem[]>([]);
 
   useEffect(() => {
     // create a variable to hold our db details
@@ -49,7 +54,7 @@ export default function Dashboard() {
               <GroceryList
                 key={groceryItem.key}
                 id={groceryItem.key}
-                {...groceryItem}
+                itemName={groceryItem.itemName}
               />
             );
           })}
