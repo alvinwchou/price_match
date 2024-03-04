@@ -2,10 +2,10 @@
 
 import { getDatabase, push, ref } from "firebase/database";
 import firebase from "../../firebase";
-import { useEffect, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
-export default function addGroceryItem() {
+export default function AddGroceryItem() {
   const [userInput, setUserInput] = useState("");
   const router = useRouter();
 
