@@ -9,11 +9,10 @@ type OnSaleItem = {
 };
 
 type OnSaleList = {
-  id: string;
   itemName: string;
 };
 
-export default function OnSaleList({ id, itemName }: OnSaleList) {
+export default function OnSaleList({ itemName }: OnSaleList) {
   const [onSaleItems, setOnSaleItems] = useState<OnSaleItem[]>([]);
 
   useEffect(() => {
@@ -23,7 +22,7 @@ export default function OnSaleList({ id, itemName }: OnSaleList) {
       // console.log(apiData.data.items);
       setOnSaleItems(apiData.data.items);
     })
-  }, []);
+  }, [itemName]);
 
   return (
     <li className="flex flex-col justify-between p-4 border rounded">
