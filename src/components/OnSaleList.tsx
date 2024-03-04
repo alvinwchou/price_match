@@ -28,9 +28,9 @@ export default function OnSaleList({ itemName }: OnSaleList) {
     <li className="flex flex-col justify-between p-4 border rounded">
       <p>{itemName}</p>
       <ul>
-        {onSaleItems.map((onSaleItem) => {
+        {onSaleItems.map((onSaleItem, index) => {
           return (
-            <li>
+            <li key={index}>
               <p>{onSaleItem.name}</p>
               <p>{onSaleItem.current_price}</p>
               <p>{onSaleItem.merchant_name}</p>
