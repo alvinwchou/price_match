@@ -3,7 +3,7 @@ type OnSaleItemProps = {
     name: string;
     current_price: number;
     merchant_name: string;
-    post_price_test: string;
+    post_price_text: string;
   };
 
 export default function OnSaleItem({name, current_price, merchant_name, post_price_text}: OnSaleItemProps) {
