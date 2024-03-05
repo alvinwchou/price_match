@@ -28,6 +28,14 @@ export default function Home() {
       <br />
       <p>Currently using axios to fetch API, will comeback and try new fetch from nextjs</p>
       <br />
+      <p>Dashboard: </p>
+      <p>Grocery List - list of all gorcery items you want to purchase</p>
+      <p>Grocery On Sale - list of all items that are currently on sale from based on your Grocery List</p>
+      <br />
+      <p>Add a grocery item page:</p>
+      <p>After entering an item it will populate the naming of the item that the flyers use ie. we say BROCCOLI which is BROCCOLI CROWNS</p>
+
+
       <Link href="/dashboard">Go to Dashboard</Link>
     </div>
   );

@@ -80,7 +80,7 @@ export default function AddGroceryItem() {
         />
         <button>Add Item</button>
       </form>
-      <ul className="flex flex-wrap gap-5 my-10">
+      <ul className="flex flex-wrap gap-5 my-10 h-80vh overflow-auto">
         {returnSearchItems.map((searchItem, index) => {
           return (
             <ReturnSearchItem key={index} name={searchItem}/>
