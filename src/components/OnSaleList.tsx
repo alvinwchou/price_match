@@ -30,6 +30,7 @@ export default function OnSaleList({ itemName }: OnSaleListProps) {
       <p>{itemName}</p>
       <ul>
         {onSaleItems.map((onSaleItem, index) => {
+          console.log(onSaleItem)
           return (
             <OnSaleItem key={index} {...onSaleItem}/>
           );
