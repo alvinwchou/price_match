@@ -21,8 +21,9 @@ export default function ReturnSearchItem({name}: ReturnSearchItemProps) {
     if (!name) return
 
     return (
-        <li className="bg-white">
-            <p>{name.toUpperCase()} <button onClick={handleClick}>Add</button> </p>
+        <li className="bg-white rounded">
+            <p>{name.toUpperCase()}</p>
+            <button onClick={handleClick}>Add</button> 
         </li>
     )
 }   

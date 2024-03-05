@@ -50,7 +50,7 @@ export default function AddGroceryItem() {
 
       // push all the item names into an array
       apiData.data.items.map((item: {name: string}) => {
-        itemNames.push(item.name)
+        itemNames.push(item.name?.toUpperCase())
       })
       
       // remove duplicate names
