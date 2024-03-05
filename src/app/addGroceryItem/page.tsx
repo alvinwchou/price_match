@@ -45,9 +45,18 @@ export default function AddGroceryItem() {
     axios({
       url: `https://backflipp.wishabi.com/flipp/items/search?locale=en-ca&postal_code=m1w2z6&q=${userInput}`,
     }).then((apiData: AxiosResponse<any>) => {
-      console.log(apiData.data.items);
-      setReturnSearchItems(apiData.data.items);
 
+      const itemNames: string[] = []
+
+      // push all the item names into an array
+      apiData.data.items.map((item: {name: string}) => {
+        itemNames.push(item.name)
+      })
+      
+      // remove duplicate names
+      const uniqueItemNames =  Array.from(new Set(itemNames))
+
+      setReturnSearchItems(uniqueItemNames)
     })
   }, [userInput]);
 
@@ -73,9 +82,8 @@ export default function AddGroceryItem() {
       </form>
       <ul className="flex flex-wrap gap-5 my-10">
         {returnSearchItems.map((searchItem, index) => {
-        // console.log(returnSearchItems)
           return (
-            <ReturnSearchItem key={index} {...searchItem}/>
+            <ReturnSearchItem key={index} name={searchItem}/>
           )
         })}
       </ul>
