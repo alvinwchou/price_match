@@ -46,8 +46,8 @@ export default function Dashboard() {
         <h1>PRICE MATCH</h1>
       </header>
       <div className="grid grid-cols-3 gap-10 max-w-6xl m-auto">
-        <div className="rounded my-10 bg-white w-full mx-auto shadow-2xl">
-          <h2>Grocery List</h2>
+        <div className="flex flex-col rounded my-10 bg-white w-full mx-auto shadow-2xl">
+          <h2 className="text-center">Grocery List</h2>
           <ul className="border bg-white rounded">
             {groceryList.map((groceryItem) => {
               return (
@@ -59,12 +59,14 @@ export default function Dashboard() {
               );
             })}
           </ul>
-          <Link href="/addGroceryItem" className="">
-            Add a Grocery Item
-          </Link>
+          <div className="mt-auto flex justify-center">
+            <Link href="/addGroceryItem" className="border">
+              Add a Grocery Item
+            </Link>
+          </div>
         </div>
         <div className="rounded my-10 bg-white w-full mx-auto shadow-2xl overflow-auto h-80vh">
-          <h2>Grocery on Sale</h2>
+          <h2 className="text-center">Grocery on Sale</h2>
           <ul className="border bg-white rounded">
             {groceryList.map((groceryItem) => {
               return (

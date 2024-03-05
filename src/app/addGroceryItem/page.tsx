@@ -15,7 +15,7 @@ export default function AddGroceryItem() {
   // handle user input function
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     console.log(e.target.value)
-    setUserInput(e.target.value);
+    setUserInput(e.target.value.toUpperCase());
   };
 
   // handle submit function
@@ -35,6 +35,11 @@ export default function AddGroceryItem() {
     router.push("/dashboard");
   };
 
+  // handle click function
+  const handleClick = () => {
+    router.push("/dashboard");
+  }
+
   // calling api 
   useEffect(() => {
     axios({
@@ -42,14 +47,15 @@ export default function AddGroceryItem() {
     }).then((apiData: AxiosResponse<any>) => {
       console.log(apiData.data.items);
       setReturnSearchItems(apiData.data.items);
+
     })
   }, [userInput]);
 
   return (
-    <div className="border rounded my-10 bg-white w-1/2 mx-auto">
+    <div className="my-10 w-1/2 mx-auto">
       <form
         action="submit"
-        className="flex justify-between"
+        className="flex justify-between bg-white"
         onSubmit={handleSubmit}
       >
         <label htmlFor="newGroceryItem" className="sr-only">
@@ -61,17 +67,19 @@ export default function AddGroceryItem() {
           placeholder="Add a Grocery Item"
           onChange={handleInputChange}
           value={userInput}
+          className="w-9/12"
         />
         <button>Add Item</button>
       </form>
-      <ul>
+      <ul className="flex flex-wrap gap-5 my-10">
         {returnSearchItems.map((searchItem, index) => {
-        console.log(returnSearchItems)
+        // console.log(returnSearchItems)
           return (
             <ReturnSearchItem key={index} {...searchItem}/>
           )
         })}
       </ul>
+      <button onClick={handleClick}>Back</button>
     </div>
   );
 }

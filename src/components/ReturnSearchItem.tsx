@@ -16,14 +16,13 @@ export default function ReturnSearchItem({name}: ReturnSearchItemProps) {
         const dbRef = ref(database);
 
         // push the value to the database
-        push(dbRef, target.previousSibling?.textContent);
+        push(dbRef, target.previousSibling?.textContent?.toUpperCase());
     }
     if (!name) return
 
     return (
-        <li>
-            <p>{name}</p>
-            <button onClick={handleClick}>Add</button>
+        <li className="bg-white">
+            <p>{name.toUpperCase()} <button onClick={handleClick}>Add</button> </p>
         </li>
     )
 }   
