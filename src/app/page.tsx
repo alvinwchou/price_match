@@ -34,7 +34,9 @@ export default function Home() {
       <br />
       <p>Add a grocery item page:</p>
       <p>After entering an item it will populate the naming of the item that the flyers use ie. we say BROCCOLI which is BROCCOLI CROWNS</p>
-
+      <br />
+      <p>last update: Mar 6, 20204</p>
+      <br />
 
       <Link href="/dashboard">Go to Dashboard</Link>
     </div>
