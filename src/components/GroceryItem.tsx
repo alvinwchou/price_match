@@ -19,7 +19,7 @@ export default function GroceryList({ id, itemName }: GroceryListProps) {
     remove(dbRef);
   };
   return (
-    <li className="flex justify-between p-4 border rounded">
+    <li className="flex justify-between p-4 border rounded bg-white bg-opacity-50">
       <p>{itemName}</p>
       <button onClick={() => handleRemoveGroceryItem(id)}>x</button>
     </li>

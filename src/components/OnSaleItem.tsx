@@ -11,7 +11,7 @@ export default function OnSaleItem({name, current_price, merchant_name, post_pri
     if (!current_price) return
 
     return (
-        <li className="border">
+        <li className="p-4 border rounded bg-white bg-opacity-50">
             <p>{name}</p>
             <p>{current_price} {post_price_text}</p>
             <p>{merchant_name}</p>

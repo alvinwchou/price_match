@@ -26,7 +26,7 @@ export default function OnSaleList({ itemName }: OnSaleListProps) {
   }, [itemName]);
 
   return (
-    <li className="flex flex-col justify-between p-4 border rounded">
+    <li className="flex flex-col justify-between p-4 mb-5 aborder rounded bg-white bg-opacity-50">
       <p>{itemName}</p>
       <ul>
         {onSaleItems.map((onSaleItem, index) => {

@@ -43,12 +43,14 @@ export default function Dashboard() {
   return (
     <>
       <header className="flex justify-center">
-        <h1>PRICE MATCH</h1>
+        <h1 className="text-5xl">PRICE MATCH</h1>
       </header>
       <div className="grid grid-cols-3 gap-10 max-w-6xl m-auto">
-        <div className="flex flex-col rounded my-10 bg-white w-full mx-auto shadow-2xl">
-          <h2 className="text-center">Grocery List</h2>
-          <ul className="border bg-white rounded">
+
+        {/* Grocery List */}
+        <div className="rounded my-10 bg-white w-full mx-auto shadow-2xl bg-opacity-50 p-2 flex flex-col">
+          <h2 className="text-center text-2xl">Grocery List</h2>
+          <ul className="">
             {groceryList.map((groceryItem) => {
               return (
                 <GroceryItem
@@ -60,14 +62,16 @@ export default function Dashboard() {
             })}
           </ul>
           <div className="mt-auto flex justify-center">
-            <Link href="/addGroceryItem" className="border">
+            <Link href="/addGroceryItem" className="px-4 border rounded mx-2 bg-white bg-opacity-50">
               Add a Grocery Item
             </Link>
           </div>
         </div>
-        <div className="rounded my-10 bg-white w-full mx-auto shadow-2xl overflow-auto h-80vh">
-          <h2 className="text-center">Grocery on Sale</h2>
-          <ul className="border bg-white rounded">
+
+        {/* Grocery On Sale */}
+        <div className="rounded my-10 bg-white w-full mx-auto shadow-2xl bg-opacity-50 p-2 h-80vh overflow-auto">
+          <h2 className="text-center text-2xl">Grocery on Sale</h2>
+          <ul className="">
             {groceryList.map((groceryItem) => {
               return (
                 <OnSaleList
