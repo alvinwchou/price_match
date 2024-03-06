@@ -48,9 +48,9 @@ export default function Dashboard() {
       <div className="grid grid-cols-3 gap-10 max-w-6xl m-auto">
 
         {/* Grocery List */}
-        <div className="rounded my-10 bg-white w-full mx-auto shadow-2xl bg-opacity-50 p-2 flex flex-col">
+        <div className="rounded my-10 bg-white w-full mx-auto shadow-2xl bg-opacity-50 p-2 h-80vh flex flex-col gap-2">
           <h2 className="text-center text-2xl">Grocery List</h2>
-          <ul className="">
+          <ul className="overflow-auto">
             {groceryList.map((groceryItem) => {
               return (
                 <GroceryItem
@@ -69,9 +69,9 @@ export default function Dashboard() {
         </div>
 
         {/* Grocery On Sale */}
-        <div className="rounded my-10 bg-white w-full mx-auto shadow-2xl bg-opacity-50 p-2 h-80vh overflow-auto">
+        <div className="rounded my-10 bg-white w-full mx-auto shadow-2xl bg-opacity-50 p-2 h-80vh flex flex-col gap-2">
           <h2 className="text-center text-2xl">Grocery on Sale</h2>
-          <ul className="">
+          <ul className="overflow-auto">
             {groceryList.map((groceryItem) => {
               return (
                 <OnSaleList

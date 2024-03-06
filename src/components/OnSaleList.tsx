@@ -10,7 +10,9 @@ type OnSaleItem = {
   name: string;
   current_price: number;
   merchant_name: string;
+  merchant_logo: string
   post_price_text: string;
+  clean_image_url: string
 }
 
 export default function OnSaleList({ itemName }: OnSaleListProps) {
