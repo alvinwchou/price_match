@@ -1,5 +1,9 @@
+import firebase from "@/firebase";
+import { getDatabase, push, ref } from "firebase/database";
+
 // define type for onSaleItem we expect to receive from API
 type OnSaleItemProps = {
+    id: string
     name: string;
     current_price: number;
     merchant_name: string;
@@ -10,7 +14,7 @@ type OnSaleItemProps = {
     valid_to: string
   };
 
-export default function OnSaleItem({name, current_price, merchant_name, merchant_logo, post_price_text, clean_image_url, valid_from, valid_to}: OnSaleItemProps) {
+export default function OnSaleItem({id, name, current_price, merchant_name, merchant_logo, post_price_text, clean_image_url, valid_from, valid_to}: OnSaleItemProps) {
 
     if (!current_price) return
     
@@ -44,18 +48,31 @@ export default function OnSaleItem({name, current_price, merchant_name, merchant
         if (startDate.getTime() === tomorrow.getTime()) return true
     }
 
+    // function to add item to the exlude list for (ex exclude baby carrots from carrots)
+    const handleClick = (id: string, itemName: string) => {
+        console.log(id, itemName)
+        // create a reference to our db
+        const database = getDatabase(firebase)
+        // const dbRef = ref(database, id)
+
+        // push the sub item under the item
+        // push(dbRef, itemName)
+         
+    }
+
     return (
         <li className="p-4 border rounded bg-white bg-opacity-50">
 
             {/* header */}
-            <div className="flex items-center mb-2">
+            <div className="flex items-center mb-2 p2">
                 {/* image container */}
-                <div className="border rounded-full overflow-hidden size-7">
-                    <img src={merchant_logo} alt={`${merchant_name}'s logo`} />
+                <div className="size-7 flex items-center">
+                    <img className="border rounded-full" src={merchant_logo} alt={`${merchant_name}'s logo`} />
                 </div>
                 {/* text container */}
-                <div className="ml-2">
+                <div className="ml-1 flex justify-between items-baseline w-full">
                     <p className="font-medium">{merchant_name}</p>
+                    <button className="border rounded p-1 text-xs" onClick={()=>handleClick(id, name)}>Exclude</button>
                 </div>
             </div>
 

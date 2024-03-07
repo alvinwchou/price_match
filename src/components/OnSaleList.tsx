@@ -3,10 +3,12 @@ import { useEffect, useState } from "react";
 import OnSaleItem from "./OnSaleItem";
 
 type OnSaleListProps = {
+  id: string
   itemName: string;
 };
 
 type OnSaleItem = {
+  id: string
   name: string;
   current_price: number;
   merchant_name: string;
@@ -17,7 +19,7 @@ type OnSaleItem = {
   valid_to: string
 }
 
-export default function OnSaleList({ itemName }: OnSaleListProps) {
+export default function OnSaleList({ id, itemName }: OnSaleListProps) {
   const [onSaleItems, setOnSaleItems] = useState<OnSaleItem[]>([]);
 
   useEffect(() => {
@@ -31,39 +33,39 @@ export default function OnSaleList({ itemName }: OnSaleListProps) {
 
     })
   }, [itemName]);
-  // show unique post_price_text
-  // useEffect(() => {
-  //   axios({
-  //     url: `https://backflipp.wishabi.com/flipp/items/search?locale=en-ca&postal_code=m1w2z6&q=FreshCo`,
-  //   }).then((apiData: AxiosResponse<any>) => {
-  //     // console.log(apiData.data.items);
-  //     const test: any[] = []
-  //     apiData.data.items.map((item: { post_price_text: any; }) => {
-  //       test.push(item.post_price_text)
-  //     })
-  //     console.log(Array.from(new Set(test)));
-      
-  //   })
-  // }, []);
 
   // function to find the lowest priced item
   const findLowestPriced = (items: any[]) => {
     let lowestPricedItemInfo
-    let lowestPriced = Infinity
-
-    items.map((item: { current_price: number; }) => {
+    let lowestPriced = Infinity;
+  
+    items.forEach((item: any) => {
+      // create a variabe that includes the grocery list item id
+      const onSaleItem: OnSaleItem = {
+        id: id,
+        name: item.name,
+        current_price: item.current_price,
+        merchant_name: item.merchant_name,
+        merchant_logo: item.merchant_logo,
+        post_price_text: item.post_price_text,
+        clean_image_url: item.clean_image_url,
+        valid_from: item.valid_from,
+        valid_to: item.valid_to
+      };
+  
       if (item.current_price && item.current_price < lowestPriced) {
-        lowestPriced = item.current_price
-        lowestPricedItemInfo = item
+        lowestPriced = item.current_price;
+        lowestPricedItemInfo = onSaleItem;
       }
-    }) 
-
+    });
+  
     if (lowestPricedItemInfo) {
       setOnSaleItems([lowestPricedItemInfo]);
     } else {
       setOnSaleItems([]);
     }
-  }
+  };
+  
   
   return (
     onSaleItems.length != 0 &&

@@ -74,8 +74,9 @@ export default function Dashboard() {
             {groceryList.map((groceryItem) => {
               return (
                 <OnSaleList
-                  key={groceryItem.key}
-                  itemName={groceryItem.itemName}
+                key={groceryItem.key} 
+                id={groceryItem.key} 
+                itemName={groceryItem.itemName}
                 />
               );
             })}
