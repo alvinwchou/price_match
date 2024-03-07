@@ -80,14 +80,16 @@ export default function AddGroceryItem() {
         />
         <button>Add Item</button>
       </form>
-      <ul className="flex flex-wrap gap-5 my-10 h-80vh overflow-auto">
+      <ul className="rounded my-10 bg-white w-full mx-auto shadow-2xl bg-opacity-50 p-2 h-80vh overflow-auto flex flex-wrap content-start items- gap-5 my-10 h-80vh">
         {returnSearchItems.map((searchItem, index) => {
           return (
             <ReturnSearchItem key={index} name={searchItem}/>
           )
         })}
       </ul>
-      <button onClick={handleClick}>Back</button>
+      <div className="mt-auto flex justify-center">
+        <button className="px-4 border rounded mx-2 bg-white bg-opacity-50" onClick={handleClick}>Back</button>
+      </div>
     </div>
   );
 }

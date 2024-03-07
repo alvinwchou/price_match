@@ -24,7 +24,6 @@ export default function Dashboard() {
 
     // add event listener to that variable that will fire from the db, and call that data 'response'
     onValue(dbRef, (response) => {
-      console.log(response.val());
       // create a variable to store the new state we want to introduce to our app
       const newState = [];
 
