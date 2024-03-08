@@ -6,10 +6,13 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import GroceryItem from "@/components/GroceryItem";
 import OnSaleList from "@/components/OnSaleList";
+import { Console } from "console";
 
 type GroceryItem = {
   key: string
-  itemName: string
+  groceryItem: {
+    itemName: string
+  }
 }
 
 export default function Dashboard() {
@@ -32,7 +35,7 @@ export default function Dashboard() {
 
       // data is an object, iterate through it using for in loop to access each item
       for (let key in data) {
-        newState.push({ key: key, itemName: data[key] });
+        newState.push({ key: key, groceryItem: data[key] });
       }
 
       setGroceryList(newState);
@@ -51,11 +54,12 @@ export default function Dashboard() {
           <h2 className="text-center text-2xl">Grocery List</h2>
           <ul className="overflow-auto">
             {groceryList.map((groceryItem) => {
+              console.log(groceryItem.groceryItem)
               return (
                 <GroceryItem
                   key={groceryItem.key}
                   id={groceryItem.key}
-                  itemName={groceryItem.itemName}
+                  itemName={groceryItem.groceryItem.itemName}
                 />
               );
             })}
@@ -76,7 +80,7 @@ export default function Dashboard() {
                 <OnSaleList
                 key={groceryItem.key} 
                 id={groceryItem.key} 
-                itemName={groceryItem.itemName}
+                itemName={groceryItem.groceryItem.itemName}
                 />
               );
             })}

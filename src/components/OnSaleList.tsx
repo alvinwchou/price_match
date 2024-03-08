@@ -27,10 +27,7 @@ export default function OnSaleList({ id, itemName }: OnSaleListProps) {
       url: `https://backflipp.wishabi.com/flipp/items/search?locale=en-ca&postal_code=m1w2z6&q=${itemName}`,
     }).then((apiData: AxiosResponse<any>) => {
       console.log(apiData.data.items)
-      // setOnSaleItems(apiData.data.items);
       findLowestPriced(apiData.data.items)
-      // setOnSaleItems(apiData.data.items);
-
     })
   }, [itemName]);
 

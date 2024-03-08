@@ -51,12 +51,17 @@ export default function OnSaleItem({id, name, current_price, merchant_name, merc
     // function to add item to the exlude list for (ex exclude baby carrots from carrots)
     const handleClick = (id: string, itemName: string) => {
         console.log(id, itemName)
-        // create a reference to our db
-        const database = getDatabase(firebase)
+        // // create a reference to our db
+        // const database = getDatabase(firebase)
         // const dbRef = ref(database, id)
 
-        // push the sub item under the item
-        // push(dbRef, itemName)
+        // const data = {
+        //     [id]: {
+        //         exclude: [itemName]
+        //     }
+        // }
+        // // push the sub item under the item
+        // push(dbRef, data)
          
     }
 

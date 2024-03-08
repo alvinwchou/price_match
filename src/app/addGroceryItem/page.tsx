@@ -7,6 +7,11 @@ import { useRouter } from "next/navigation";
 import axios, { AxiosResponse } from "axios";
 import ReturnSearchItem from "@/components/ReturnSearchItem";
 
+type addToList = {
+  itemName: string
+  exclude: string[]
+}
+
 export default function AddGroceryItem() {
   const [userInput, setUserInput] = useState("");
   const [returnSearchItems, setReturnSearchItems] = useState<any[]>([])
@@ -14,7 +19,6 @@ export default function AddGroceryItem() {
 
   // handle user input function
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(e.target.value)
     setUserInput(e.target.value.toUpperCase());
   };
 
@@ -26,8 +30,13 @@ export default function AddGroceryItem() {
     const database = getDatabase(firebase);
     const dbRef = ref(database);
 
+    const addToList: addToList = {
+      itemName: userInput,
+      exclude: []
+    }
+
     // push the value of the 'userInput' state to the database
-    push(dbRef, userInput);
+    push(dbRef, addToList);
 
     // reset the state of an empty string
     setUserInput("");
@@ -35,12 +44,12 @@ export default function AddGroceryItem() {
     router.push("/dashboard");
   };
 
-  // handle click function
+  // handle click function to go back to dashboard
   const handleClick = () => {
     router.push("/dashboard");
   }
 
-  // calling api 
+  // calling api to fetch a list of grocery items that are on sale
   useEffect(() => {
     axios({
       url: `https://backflipp.wishabi.com/flipp/items/search?locale=en-ca&postal_code=m1w2z6&q=${userInput}`,
@@ -59,7 +68,7 @@ export default function AddGroceryItem() {
       setReturnSearchItems(uniqueItemNames)
     })
   }, [userInput]);
-
+console.log('hello')
   return (
     <div className="my-10 w-1/2 mx-auto">
       <form

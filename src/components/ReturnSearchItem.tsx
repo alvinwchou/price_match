@@ -5,6 +5,11 @@ type ReturnSearchItemProps = {
     name: string
 }
 
+type addToList = {
+    itemName: string
+    exclude: string[]
+  }
+
 export default function ReturnSearchItem({name}: ReturnSearchItemProps) {
     // handle click function
     const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -15,8 +20,15 @@ export default function ReturnSearchItem({name}: ReturnSearchItemProps) {
         const database = getDatabase(firebase);
         const dbRef = ref(database);
 
+        const itemName = target.previousSibling?.textContent?.toUpperCase() || ""
+
+        const addToList: addToList = {
+            itemName: itemName,
+            exclude: []
+          }
+
         // push the value to the database
-        push(dbRef, target.previousSibling?.textContent?.toUpperCase());
+        push(dbRef, addToList);
     }
     if (!name) return
 
