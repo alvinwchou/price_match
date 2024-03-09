@@ -12,6 +12,7 @@ type GroceryItem = {
   key: string
   groceryItem: {
     itemName: string
+    exclude: string[]
   }
 }
 
@@ -60,6 +61,7 @@ export default function Dashboard() {
                   key={groceryItem.key}
                   id={groceryItem.key}
                   itemName={groceryItem.groceryItem.itemName}
+                  excludeList={groceryItem.groceryItem.exclude}
                 />
               );
             })}
@@ -81,6 +83,7 @@ export default function Dashboard() {
                 key={groceryItem.key} 
                 id={groceryItem.key} 
                 itemName={groceryItem.groceryItem.itemName}
+                excludeList={groceryItem.groceryItem.exclude}
                 />
               );
             })}

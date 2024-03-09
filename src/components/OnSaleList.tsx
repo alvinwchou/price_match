@@ -2,12 +2,13 @@ import axios, { AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
 import OnSaleItem from "./OnSaleItem";
 
-type OnSaleListProps = {
+interface OnSaleListProps {
   id: string
   itemName: string;
+  excludeList: string[]
 };
 
-type OnSaleItem = {
+interface OnSaleItem {
   id: string
   name: string;
   current_price: number;
@@ -19,7 +20,7 @@ type OnSaleItem = {
   valid_to: string
 }
 
-export default function OnSaleList({ id, itemName }: OnSaleListProps) {
+export default function OnSaleList({ id, itemName, excludeList }: OnSaleListProps) {
   const [onSaleItems, setOnSaleItems] = useState<OnSaleItem[]>([]);
 
   useEffect(() => {
@@ -29,10 +30,11 @@ export default function OnSaleList({ id, itemName }: OnSaleListProps) {
       console.log(apiData.data.items)
       findLowestPriced(apiData.data.items)
     })
-  }, [itemName]);
+  }, [itemName, excludeList]);
 
   // function to find the lowest priced item
   const findLowestPriced = (items: any[]) => {
+    console.log('loweset')
     let lowestPricedItemInfo
     let lowestPriced = Infinity;
   
@@ -49,8 +51,8 @@ export default function OnSaleList({ id, itemName }: OnSaleListProps) {
         valid_from: item.valid_from,
         valid_to: item.valid_to
       };
-  
-      if (item.current_price && item.current_price < lowestPriced) {
+
+      if (item.current_price && item.current_price < lowestPriced && !excludeList?.includes(item.name)) {
         lowestPriced = item.current_price;
         lowestPricedItemInfo = onSaleItem;
       }
@@ -59,7 +61,7 @@ export default function OnSaleList({ id, itemName }: OnSaleListProps) {
     if (lowestPricedItemInfo) {
       setOnSaleItems([lowestPricedItemInfo]);
     } else {
-      setOnSaleItems([]);
+      setOnSaleItems([]); 
     }
   };
   

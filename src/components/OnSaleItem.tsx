@@ -1,8 +1,9 @@
 import firebase from "@/firebase";
-import { getDatabase, push, ref } from "firebase/database";
+import { getDatabase, ref, set, onValue, push } from "firebase/database";
+
 
 // define type for onSaleItem we expect to receive from API
-type OnSaleItemProps = {
+interface OnSaleItemProps {
     id: string
     name: string;
     current_price: number;
@@ -12,22 +13,23 @@ type OnSaleItemProps = {
     clean_image_url: string
     valid_from: string
     valid_to: string
-  };
+};
 
-export default function OnSaleItem({id, name, current_price, merchant_name, merchant_logo, post_price_text, clean_image_url, valid_from, valid_to}: OnSaleItemProps) {
+
+export default function OnSaleItem({ id, name, current_price, merchant_name, merchant_logo, post_price_text, clean_image_url, valid_from, valid_to }: OnSaleItemProps) {
 
     if (!current_price) return
-    
+
     // function to show last day of sale
     const showEndsToday = (valid_to: string) => {
         // convert valid_to to Date
         const endDate = new Date(valid_to)
         // set time to 00:00:00:00
-        endDate.setHours(0,0,0,0)
+        endDate.setHours(0, 0, 0, 0)
 
         const today = new Date()
         // set time to 00:00:00
-        today.setHours(0,0,0,0)
+        today.setHours(0, 0, 0, 0)
 
         if (endDate.getTime() === today.getTime()) return true
     }
@@ -39,30 +41,37 @@ export default function OnSaleItem({id, name, current_price, merchant_name, merc
 
         const today = new Date()
         // set time to 00:00:00:00
-        today.setHours(0,0,0,0)
-        
+        today.setHours(0, 0, 0, 0)
+
         // set tomorrow's date
         const tomorrow = new Date(today);
         tomorrow.setDate(tomorrow.getDate() + 1);
-    
+
         if (startDate.getTime() === tomorrow.getTime()) return true
     }
 
     // function to add item to the exlude list for (ex exclude baby carrots from carrots)
-    const handleClick = (id: string, itemName: string) => {
-        console.log(id, itemName)
-        // // create a reference to our db
-        // const database = getDatabase(firebase)
-        // const dbRef = ref(database, id)
+    const handleClick = (id: string, excludeItemName: string) => {
+        // create a reference to our db
+        const database = getDatabase(firebase)
+        const dbRef = ref(database, id)
 
-        // const data = {
-        //     [id]: {
-        //         exclude: [itemName]
-        //     }
-        // }
-        // // push the sub item under the item
-        // push(dbRef, data)
-         
+        let groceryListItem
+        // get the exculde list from db
+        onValue(dbRef, res => {
+            groceryListItem = res.val()
+
+            // add to the exclude array
+            if (groceryListItem["exclude"]) {
+                groceryListItem["exclude"].push(excludeItemName)
+            } else {
+                groceryListItem["exclude"] = [excludeItemName]
+            }
+        })
+
+        // set new list
+        set(dbRef, groceryListItem)
+
     }
 
     return (
@@ -77,7 +86,7 @@ export default function OnSaleItem({id, name, current_price, merchant_name, merc
                 {/* text container */}
                 <div className="ml-1 flex justify-between items-baseline w-full">
                     <p className="font-medium">{merchant_name}</p>
-                    <button className="border rounded p-1 text-xs" onClick={()=>handleClick(id, name)}>Exclude</button>
+                    <button className="border rounded p-1 text-xs" onClick={() => handleClick(id, name)}>Exclude</button>
                 </div>
             </div>
 
