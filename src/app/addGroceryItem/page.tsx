@@ -58,17 +58,16 @@ export default function AddGroceryItem() {
       const itemNames: string[] = []
 
       // push all the item names into an array
-      apiData.data.items.map((item: {name: string}) => {
+      apiData.data.items.map((item: { name: string }) => {
         itemNames.push(item.name?.toUpperCase())
       })
-      
+
       // remove duplicate names
-      const uniqueItemNames =  Array.from(new Set(itemNames))
+      const uniqueItemNames = Array.from(new Set(itemNames))
 
       setReturnSearchItems(uniqueItemNames)
     })
   }, [userInput]);
-console.log('hello')
   return (
     <div className="my-10 w-1/2 mx-auto">
       <form
@@ -92,7 +91,7 @@ console.log('hello')
       <ul className="rounded my-10 bg-white w-full mx-auto shadow-2xl bg-opacity-50 p-2 h-80vh overflow-auto flex flex-wrap content-start items- gap-5 my-10 h-80vh">
         {returnSearchItems.map((searchItem, index) => {
           return (
-            <ReturnSearchItem key={index} name={searchItem}/>
+            <ReturnSearchItem key={index} name={searchItem} />
           )
         })}
       </ul>

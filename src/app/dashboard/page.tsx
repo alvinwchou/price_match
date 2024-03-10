@@ -1,13 +1,15 @@
 "use client";
 
 import { getDatabase, onValue, ref } from "firebase/database";
-import firebase from "../../firebase";
+import firebase, { auth } from "../../firebase";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import GroceryItem from "@/components/GroceryItem";
 import OnSaleList from "@/components/OnSaleList";
+import { onAuthStateChanged } from "firebase/auth";
+import { useRouter } from "next/navigation";
 
-interface GroceryItem  {
+interface GroceryItem {
   key: string
   groceryItem: {
     itemName: string
@@ -18,29 +20,38 @@ interface GroceryItem  {
 export default function Dashboard() {
   const [groceryList, setGroceryList] = useState<GroceryItem[]>([]);
 
+  const router = useRouter()
+
   useEffect(() => {
-    // create a variable to hold our db details
-    const database = getDatabase(firebase);
+    // check if the user is logged in already
+    onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser) {
+        // create a variable to hold our db details
+        const database = getDatabase(firebase);
 
-    // create a variable that makes reference to our database
-    const dbRef = ref(database);
+        // create a variable that makes reference to our database
+        const dbRef = ref(database);
 
-    // add event listener to that variable that will fire from the db, and call that data 'response'
-    onValue(dbRef, (response) => {
-      // create a variable to store the new state we want to introduce to our app
-      const newState = [];
+        // add event listener to that variable that will fire from the db, and call that data 'response'
+        onValue(dbRef, (response) => {
+          // create a variable to store the new state we want to introduce to our app
+          const newState = [];
 
-      // store the response from our query to Firebase inside of a variable
-      const data = response.val();
+          // store the response from our query to Firebase inside of a variable
+          const data = response.val();
 
-      // data is an object, iterate through it using for in loop to access each item
-      for (let key in data) {
-        newState.push({ key: key, groceryItem: data[key] });
+          // data is an object, iterate through it using for in loop to access each item
+          for (let key in data) {
+            newState.push({ key: key, groceryItem: data[key] });
+          }
+
+          setGroceryList(newState);
+        });
+      } else {
+        router.push("/signIn")
       }
-
-      setGroceryList(newState);
-    });
-  }, []);
+    })
+  }, [])
 
   return (
     <>
@@ -78,10 +89,10 @@ export default function Dashboard() {
             {groceryList.map((groceryItem) => {
               return (
                 <OnSaleList
-                key={groceryItem.key} 
-                id={groceryItem.key} 
-                itemName={groceryItem.groceryItem.itemName}
-                excludeList={groceryItem.groceryItem.exclude}
+                  key={groceryItem.key}
+                  id={groceryItem.key}
+                  itemName={groceryItem.groceryItem.itemName}
+                  excludeList={groceryItem.groceryItem.exclude}
                 />
               );
             })}
