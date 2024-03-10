@@ -12,8 +12,8 @@ interface GroceryListProps {
 
 export default function GroceryList({ id, itemName, excludeList }: GroceryListProps) {
   const [hideExcludeList, setHideExcludeList] = useState(true)
-  const [showExcludeListButton, setShowExcludeListButton] = useState(false)
-  
+  const [hideExcludeListButton, setHideExcludeListButton] = useState(true)
+
   // this function takes an argument, which is the ID of the grocery item we want to remove
   const handleRemoveGroceryItem = (groceryItemId: string) => {
     // create a reference to db
@@ -27,11 +27,14 @@ export default function GroceryList({ id, itemName, excludeList }: GroceryListPr
   const handleClick = () => {
     setHideExcludeList(!hideExcludeList)
   }
-useEffect(() => {
-  if (excludeList) {
-    setShowExcludeListButton(true)
-  }
-}, [excludeList])
+
+  useEffect(() => {
+    if (excludeList) {
+      setHideExcludeListButton(false)
+    } else {
+      setHideExcludeListButton(true)
+    }
+  }, [excludeList])
 
   return (
     <li className="p-4 border rounded bg-white bg-opacity-50">
@@ -39,11 +42,11 @@ useEffect(() => {
         <p>{itemName}</p>
         <button onClick={() => handleRemoveGroceryItem(id)}>x</button>
       </div>
-      <button className={`text-xs border rounded ${!showExcludeListButton && "hidden"}`} onClick={handleClick}>Exclude List</button>
+      <button className={`text-xs border rounded ${hideExcludeListButton && "hidden"}`} onClick={handleClick}>Exclude List</button>
       <ul className={`p-1 ${hideExcludeList && "hidden"}`}>
         {excludeList?.map(excludeItem => {
           return (
-            <ExcludeList excludeItem={excludeItem}/>
+            <ExcludeList id={id} excludeItem={excludeItem} />
           )
         })}
       </ul>
