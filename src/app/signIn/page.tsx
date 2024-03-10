@@ -43,8 +43,18 @@ export default function SignUp() {
             })
     }
 
-    const handleClick = () => {
+    const handleCreateAccountClick = () => {
         router.push("/signUp")
+    }
+
+    const handleGuestClick = () => {
+        signInWithEmailAndPassword(auth, "guest@pricematch.com", "password")
+        .then(()=>{
+            router.push("/dashboard")
+        })
+        .catch((e) => {
+            console.error(e)
+        })
     }
 
     return (
@@ -60,7 +70,10 @@ export default function SignUp() {
                 </div>
                 <div className="flex justify-between">
                     <button>Enter</button>
-                    <button onClick={handleClick}>Create an Account</button>
+                    <button onClick={handleCreateAccountClick}>Create an Account</button>
+                </div>
+                <div className="flex">
+                    <button onClick={handleGuestClick}>Sign in as Guest</button>
                 </div>
             </form>
         </>
