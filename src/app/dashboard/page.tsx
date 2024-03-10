@@ -1,14 +1,13 @@
 "use client";
 
-import { getDatabase, onValue, ref, remove } from "firebase/database";
+import { getDatabase, onValue, ref } from "firebase/database";
 import firebase from "../../firebase";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import GroceryItem from "@/components/GroceryItem";
 import OnSaleList from "@/components/OnSaleList";
-import { Console } from "console";
 
-type GroceryItem = {
+interface GroceryItem  {
   key: string
   groceryItem: {
     itemName: string
@@ -55,7 +54,6 @@ export default function Dashboard() {
           <h2 className="text-center text-2xl">Grocery List</h2>
           <ul className="overflow-auto">
             {groceryList.map((groceryItem) => {
-              console.log(groceryItem.groceryItem)
               return (
                 <GroceryItem
                   key={groceryItem.key}
