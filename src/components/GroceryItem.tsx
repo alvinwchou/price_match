@@ -44,9 +44,9 @@ export default function GroceryList({ id, itemName, excludeList }: GroceryListPr
       </div>
       <button className={`text-xs border rounded ${hideExcludeListButton && "hidden"}`} onClick={handleClick}>Exclude List</button>
       <ul className={`p-1 ${hideExcludeList && "hidden"}`}>
-        {excludeList?.map(excludeItem => {
+        {excludeList?.map((excludeItem, index) => {
           return (
-            <ExcludeList id={id} excludeItem={excludeItem} />
+            <ExcludeList key={index} id={id} excludeItem={excludeItem} />
           )
         })}
       </ul>
