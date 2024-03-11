@@ -31,13 +31,13 @@ export default function Home() {
       <p>Dashboard: </p>
       <p>Grocery List - list of all gorcery items you want to purchase
       </p>
-      <p>- if you have exluded an item a "Exclude List" button will show you have the option of adding it back to the on sale list</p>
+      <p>- if you have exluded an item a Exclude List button will show you have the option of adding it back to the on sale list</p>
       <p>Grocery On Sale - list of all items that are currently on sale from based on your Grocery List</p>
       <br />
       <p>Add a grocery item page:</p>
       <p>After entering an item it will populate the naming of the item that the flyers use ie. we say BROCCOLI which is BROCCOLI CROWNS</p>
       <br />
-      <p>last update: Mar 9, 20204</p>
+      <p>last update: Mar 10, 20204</p>
       <br />
 
       <Link href="/dashboard">Go to Dashboard</Link>
