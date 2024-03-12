@@ -1,4 +1,11 @@
+"use client"
+
+import firebase, { auth } from "@/firebase";
+import { onAuthStateChanged } from "firebase/auth";
+import { getDatabase, onValue, ref } from "firebase/database";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function Home() {
   return (
@@ -41,6 +48,7 @@ export default function Home() {
       <br />
 
       <Link href="/dashboard">Go to Dashboard</Link>
+
     </div>
   );
 }

@@ -17,8 +17,24 @@ interface GroceryItem {
   }
 }
 
+interface User {
+  userInfo: {
+    uid: string
+  }
+  list?: {
+    itemName: string
+    exclude?: string[]
+  }
+}
+
 export default function Dashboard() {
   const [groceryList, setGroceryList] = useState<GroceryItem[]>([]);
+
+  const [user, setUser] = useState<User>({
+    userInfo: {
+      uid: ""
+    },
+  })
 
   const router = useRouter()
 
@@ -40,10 +56,19 @@ export default function Dashboard() {
           // store the response from our query to Firebase inside of a variable
           const data = response.val();
 
+          console.log(currentUser, data)
+
           // data is an object, iterate through it using for in loop to access each item
           for (let key in data) {
             newState.push({ key: key, groceryItem: data[key] });
           }
+
+          const tempUserState: User = {
+            userInfo: currentUser,
+            list: data
+          }
+
+          setUser(tempUserState)
 
           setGroceryList(newState);
         });
@@ -76,7 +101,7 @@ export default function Dashboard() {
             })}
           </ul>
           <div className="mt-auto flex justify-center">
-            <Link href="/addGroceryItem" className="px-4 border rounded mx-2 bg-white bg-opacity-50">
+            <Link href={{pathname: "/addGroceryItem", query:{uid: user.userInfo.uid}}} className="px-4 border rounded mx-2 bg-white bg-opacity-50">
               Add a Grocery Item
             </Link>
           </div>

@@ -12,7 +12,9 @@ type addToList = {
   exclude: string[]
 }
 
-export default function AddGroceryItem() {
+export default function AddGroceryItem({searchParams}:any) {
+  const {uid} = searchParams
+
   const [userInput, setUserInput] = useState("");
   const [returnSearchItems, setReturnSearchItems] = useState<any[]>([])
   const router = useRouter();
@@ -28,7 +30,7 @@ export default function AddGroceryItem() {
 
     // create a reference to our db
     const database = getDatabase(firebase);
-    const dbRef = ref(database);
+    const dbRef = ref(database, `user/${uid}/groceryList`);
 
     const addToList: addToList = {
       itemName: userInput,
