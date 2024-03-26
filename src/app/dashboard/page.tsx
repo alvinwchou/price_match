@@ -27,7 +27,7 @@ interface User {
   }
 }
 
-export default function Dashboard() {
+export default function Dashboard({searchParams}: any) {
   const [groceryList, setGroceryList] = useState<GroceryItem[]>([]);
 
   const [user, setUser] = useState<User>({
@@ -36,47 +36,49 @@ export default function Dashboard() {
     },
   })
 
+  console.log(searchParams.user)
+
   const router = useRouter()
 
-  useEffect(() => {
-    // check if the user is logged in already
-    onAuthStateChanged(auth, (currentUser) => {
-      if (currentUser) {
-        // create a variable to hold our db details
-        const database = getDatabase(firebase);
+  // useEffect(() => {
+  //   // check if the user is logged in already
+  //   onAuthStateChanged(auth, (currentUser) => {
+  //     if (currentUser) {
+  //       // create a variable to hold our db details
+  //       const database = getDatabase(firebase);
 
-        // create a variable that makes reference to our database
-        const dbRef = ref(database);
+  //       // create a variable that makes reference to our database
+  //       const dbRef = ref(database);
 
-        // add event listener to that variable that will fire from the db, and call that data 'response'
-        onValue(dbRef, (response) => {
-          // create a variable to store the new state we want to introduce to our app
-          const newState = [];
+  //       // add event listener to that variable that will fire from the db, and call that data 'response'
+  //       onValue(dbRef, (response) => {
+  //         // create a variable to store the new state we want to introduce to our app
+  //         const newState = [];
 
-          // store the response from our query to Firebase inside of a variable
-          const data = response.val();
+  //         // store the response from our query to Firebase inside of a variable
+  //         const data = response.val();
 
-          console.log(currentUser, data)
+  //         console.log(currentUser, data)
 
-          // data is an object, iterate through it using for in loop to access each item
-          for (let key in data) {
-            newState.push({ key: key, groceryItem: data[key] });
-          }
+  //         // data is an object, iterate through it using for in loop to access each item
+  //         for (let key in data) {
+  //           newState.push({ key: key, groceryItem: data[key] });
+  //         }
 
-          const tempUserState: User = {
-            userInfo: currentUser,
-            list: data
-          }
+  //         const tempUserState: User = {
+  //           userInfo: currentUser,
+  //           list: data
+  //         }
 
-          setUser(tempUserState)
+  //         setUser(tempUserState)
 
-          setGroceryList(newState);
-        });
-      } else {
-        router.push("/signIn")
-      }
-    })
-  }, [])
+  //         setGroceryList(newState);
+  //       });
+  //     } else {
+  //       router.push("/signIn")
+  //     }
+  //   })
+  // }, [])
 
   return (
     <>

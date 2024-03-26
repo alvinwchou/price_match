@@ -5,7 +5,7 @@ type ReturnSearchItemProps = {
     name: string
 }
 
-type addToList = {
+interface addToList {
     itemName: string
     exclude: string[]
   }

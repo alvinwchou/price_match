@@ -7,7 +7,64 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
+interface User {
+  userInfo: {
+    uid: string
+    favLocation?: string
+    savedLocations?: []
+  }
+  list?: [{
+    itemName: string
+    exclude?: string[]
+    display: boolean
+  }]
+}
+
 export default function Home() {
+  const [user, setUser] = useState<User>()
+
+  useEffect(() => {
+    // check if the user is logged in already
+    onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser) {
+        // create a variable to hold our db details
+        const database = getDatabase(firebase);
+
+        // create a variable that makes reference to our database
+        const dbRef = ref(database);
+
+        // add event listener to that variable that will fire from the db, and call that data 'response'
+        onValue(dbRef, (response) => {
+          // create a variable to store the new state we want to introduce to our app
+          const newState = [];
+
+          // store the response from our query to Firebase inside of a variable
+          const data = response.val();
+
+          console.log(currentUser, data)
+
+          // data is an object, iterate through it using for in loop to access each item
+          for (let key in data) {
+            newState.push({ key: key, groceryItem: data[key] });
+          }
+
+          const tempUserState: User = {
+            userInfo: {
+              uid: currentUser.uid
+            },
+            list: data
+          }
+
+          setUser(tempUserState)
+
+          // setGroceryList(newState);
+        });
+      } else {
+        // router.push("/signIn")
+      }
+    })
+  }, [])
+
   return (
     <div className="container m-auto">
       <p>Welcome to my first project back from a year break.</p>
@@ -44,11 +101,11 @@ export default function Home() {
       <p>Add a grocery item page:</p>
       <p>After entering an item it will populate the naming of the item that the flyers use ie. we say BROCCOLI which is BROCCOLI CROWNS</p>
       <br />
-      <p>last update: Mar 10, 20204</p>
+      <p>last update: Mar 25, 20204</p>
       <br />
 
-      <Link href="/dashboard">Go to Dashboard</Link>
+      <Link href={{pathname: "/dashboard", query: {user:{userInfo}}}}>Go to Dashboard</Link>
 
-    </div>
+    </div >
   );
 }
