@@ -107,8 +107,7 @@ export default function Home() {
       <p>last update: Mar 25, 20204</p>
       <br />
 
-      <Link href={`/Dashboard?array=${serializedUser}`} passHref>Go to Dashboard</Link>
-
+      <Link href={{pathname: "/dashboard", query:{serializedUser: serializedUser}}}>Go to Dashboard2</Link>
     </div >
   );
 }

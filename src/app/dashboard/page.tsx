@@ -25,14 +25,13 @@ interface User {
     itemName: string
     exclude?: string[]
   }
-}
+}``
 
-export default function Dashboard(props:any) {
+export default function Dashboard({ searchParams }: any) {
   const [groceryList, setGroceryList] = useState<GroceryItem[]>([]);
 
-  // deserialize the query string back into an array of objects
-  const serializedUser = props.router.query.array
-  const user = JSON.parse(decodeURIComponent(serializedUser))
+  // const serializedUser = props.router.query.array
+  // const user = JSON.parse(decodeURIComponent(serializedUser))
 
   // const [user, setUser] = useState<User>({
   //   userInfo: {
@@ -40,49 +39,52 @@ export default function Dashboard(props:any) {
   //   },
   // })
 
-  console.log("USER", user)
-
   const router = useRouter()
 
-  // useEffect(() => {
-  //   // check if the user is logged in already
-  //   onAuthStateChanged(auth, (currentUser) => {
-  //     if (currentUser) {
-  //       // create a variable to hold our db details
-  //       const database = getDatabase(firebase);
+  const { serializedUser } = searchParams
+  // deserialize the query string back into an array of objects
+  const user = JSON.parse(decodeURIComponent(serializedUser))
+  console.log(user)
 
-  //       // create a variable that makes reference to our database
-  //       const dbRef = ref(database);
+  useEffect(() => {
+    // check if the user is logged in already
+    onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser) {
+        // create a variable to hold our db details
+        const database = getDatabase(firebase);
 
-  //       // add event listener to that variable that will fire from the db, and call that data 'response'
-  //       onValue(dbRef, (response) => {
-  //         // create a variable to store the new state we want to introduce to our app
-  //         const newState = [];
+        // create a variable that makes reference to our database
+        const dbRef = ref(database);
 
-  //         // store the response from our query to Firebase inside of a variable
-  //         const data = response.val();
+        // add event listener to that variable that will fire from the db, and call that data 'response'
+        onValue(dbRef, (response) => {
+          // create a variable to store the new state we want to introduce to our app
+          const newState = [];
 
-  //         console.log(currentUser, data)
+          // store the response from our query to Firebase inside of a variable
+          const data = response.val();
 
-  //         // data is an object, iterate through it using for in loop to access each item
-  //         for (let key in data) {
-  //           newState.push({ key: key, groceryItem: data[key] });
-  //         }
+          console.log(currentUser, data)
 
-  //         const tempUserState: User = {
-  //           userInfo: currentUser,
-  //           list: data
-  //         }
+          // data is an object, iterate through it using for in loop to access each item
+          for (let key in data) {
+            newState.push({ key: key, groceryItem: data[key] });
+          }
 
-  //         setUser(tempUserState)
+          const tempUserState: User = {
+            userInfo: currentUser,
+            list: data
+          }
 
-  //         setGroceryList(newState);
-  //       });
-  //     } else {
-  //       router.push("/signIn")
-  //     }
-  //   })
-  // }, [])
+          // setUser(tempUserState)
+          console.log(newState)
+          setGroceryList(newState);
+        });
+      } else {
+        router.push("/signIn")
+      }
+    })
+  }, [])
 
   return (
     <>
@@ -107,7 +109,7 @@ export default function Dashboard(props:any) {
             })}
           </ul>
           <div className="mt-auto flex justify-center">
-            <Link href={{pathname: "/addGroceryItem", query:{uid: user.userInfo.uid}}} className="px-4 border rounded mx-2 bg-white bg-opacity-50">
+            <Link href={{ pathname: "/addGroceryItem", query: { uid: user.userInfo.uid } }} className="px-4 border rounded mx-2 bg-white bg-opacity-50">
               Add a Grocery Item
             </Link>
           </div>
