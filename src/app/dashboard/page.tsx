@@ -27,16 +27,20 @@ interface User {
   }
 }
 
-export default function Dashboard({searchParams}: any) {
+export default function Dashboard(props:any) {
   const [groceryList, setGroceryList] = useState<GroceryItem[]>([]);
 
-  const [user, setUser] = useState<User>({
-    userInfo: {
-      uid: ""
-    },
-  })
+  // deserialize the query string back into an array of objects
+  const serializedUser = props.router.query.array
+  const user = JSON.parse(decodeURIComponent(serializedUser))
 
-  console.log(searchParams.user)
+  // const [user, setUser] = useState<User>({
+  //   userInfo: {
+  //     uid: ""
+  //   },
+  // })
+
+  console.log("USER", user)
 
   const router = useRouter()
 

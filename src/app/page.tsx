@@ -65,6 +65,9 @@ export default function Home() {
     })
   }, [])
 
+  // encode the array of object, user, into a query string
+  const serializedUser = encodeURIComponent(JSON.stringify(user))
+
   return (
     <div className="container m-auto">
       <p>Welcome to my first project back from a year break.</p>
@@ -104,7 +107,7 @@ export default function Home() {
       <p>last update: Mar 25, 20204</p>
       <br />
 
-      <Link href={{pathname: "/dashboard", query: {user:{userInfo}}}}>Go to Dashboard</Link>
+      <Link href={`/Dashboard?array=${serializedUser}`} passHref>Go to Dashboard</Link>
 
     </div >
   );
