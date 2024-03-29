@@ -108,6 +108,7 @@ export default function Home() {
       <br />
 
       <Link href={{pathname: "/dashboard", query:{serializedUser: serializedUser}}}>Go to Dashboard2</Link>
+      <Link href={{pathname: "/dashboard", query:{id: serializedUser}}}>Go to Dashboard2</Link>
     </div >
   );
 }
