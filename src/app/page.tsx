@@ -2,7 +2,7 @@
 
 import firebase, { auth } from "@/firebase";
 import { onAuthStateChanged } from "firebase/auth";
-import { getDatabase, onValue, ref } from "firebase/database";
+import { getDatabase, onValue, push, ref } from "firebase/database";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -13,15 +13,23 @@ interface User {
     favLocation?: string
     savedLocations?: []
   }
-  list?: [{
+  groceryList?: [{
     itemName: string
     exclude?: string[]
     display: boolean
   }]
 }
 
+type addToList = {
+  itemName: string
+  exclude: string[]
+  display: boolean
+}
+
 export default function Home() {
   const [user, setUser] = useState<User>()
+
+  const router = useRouter()
 
   useEffect(() => {
     // check if the user is logged in already
@@ -52,7 +60,7 @@ export default function Home() {
             userInfo: {
               uid: currentUser.uid
             },
-            list: data
+            groceryList: data
           }
 
           setUser(tempUserState)
@@ -67,6 +75,26 @@ export default function Home() {
 
   // encode the array of object, user, into a query string
   const serializedUser = encodeURIComponent(JSON.stringify(user))
+
+  // hanndle submit from add grocery item form
+  const handleAddGrocerySubmit = (e: React.FormEvent<HTMLFormElement>, userInput:string) => {
+    e.preventDefault();
+
+    // create a reference to our db
+    const database = getDatabase(firebase);
+    const dbRef = ref(database, `user/${user?.userInfo.uid}/groceryList`);
+
+    const addToList: addToList = {
+      itemName: userInput,
+      exclude: [],
+      display: true
+    }
+
+     // push the value of the 'userInput' state to the database
+     push(dbRef, addToList);
+ 
+     router.push(`/dashboard?serializedUser=${serializedUser}`);
+  }
 
   return (
     <div className="container m-auto">
@@ -107,8 +135,7 @@ export default function Home() {
       <p>last update: Mar 25, 20204</p>
       <br />
 
-      <Link href={{pathname: "/dashboard", query:{serializedUser: serializedUser}}}>Go to Dashboard2</Link>
-      <Link href={{pathname: "/dashboard", query:{id: serializedUser}}}>Go to Dashboard2</Link>
+      <Link href={{pathname: "/dashboard", query:{serializedUser: serializedUser, handleSubmit: handleAddGrocerySubmit}}}>Go to Dashboard2</Link>
     </div >
   );
 }
