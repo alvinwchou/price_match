@@ -1,141 +1,33 @@
-"use client"
+import { db } from "@/firebase";
+import axios from "axios";
+import { doc, setDoc } from "firebase/firestore";
 
-import firebase, { auth } from "@/firebase";
-import { onAuthStateChanged } from "firebase/auth";
-import { getDatabase, onValue, push, ref } from "firebase/database";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+type itemsProps = {
+  valid_from: string;
+};
 
-interface User {
-  userInfo: {
-    uid: string
-    favLocation?: string
-    savedLocations?: []
-  }
-  groceryList?: [{
-    itemName: string
-    exclude?: string[]
-    display: boolean
-  }]
+async function addItemsOfTheWeek(items: itemsProps[], storeName: string) {
+  // getting the Grocery Store Ref
+  const groceryStoreRef = doc(db, "GroceryStore", storeName);
+
+  // update database with flyer items
+  await setDoc(groceryStoreRef, {
+    [items[0].valid_from]: items,
+  });
 }
 
-type addToList = {
-  itemName: string
-  exclude: string[]
-  display: boolean
-}
+export default function TestDashboard() {
+  // list of primary store name and the store names they price match with
+  const storeNames = ["no frills", "food basics"];
 
-export default function Home() {
-  const [user, setUser] = useState<User>()
+  // make api call to get flyer items of the week from store name
+  storeNames.forEach((store) => {
+    axios({
+      url: `https://backflipp.wishabi.com/flipp/items/search?locale=en-ca&postal_code=M1W2Z6&q=${store}`,
+    }).then((apiData) => {
+      addItemsOfTheWeek(apiData.data.items, store);
+    });
+  });
 
-  const router = useRouter()
-
-  useEffect(() => {
-    // check if the user is logged in already
-    onAuthStateChanged(auth, (currentUser) => {
-      if (currentUser) {
-        // create a variable to hold our db details
-        const database = getDatabase(firebase);
-
-        // create a variable that makes reference to our database
-        const dbRef = ref(database);
-
-        // add event listener to that variable that will fire from the db, and call that data 'response'
-        onValue(dbRef, (response) => {
-          // create a variable to store the new state we want to introduce to our app
-          const newState = [];
-
-          // store the response from our query to Firebase inside of a variable
-          const data = response.val();
-
-          console.log(currentUser, data)
-
-          // data is an object, iterate through it using for in loop to access each item
-          for (let key in data) {
-            newState.push({ key: key, groceryItem: data[key] });
-          }
-
-          const tempUserState: User = {
-            userInfo: {
-              uid: currentUser.uid
-            },
-            groceryList: data
-          }
-
-          setUser(tempUserState)
-
-          // setGroceryList(newState);
-        });
-      } else {
-        // router.push("/signIn")
-      }
-    })
-  }, [])
-
-  // encode the array of object, user, into a query string
-  const serializedUser = encodeURIComponent(JSON.stringify(user))
-
-  // hanndle submit from add grocery item form
-  const handleAddGrocerySubmit = (e: React.FormEvent<HTMLFormElement>, userInput:string) => {
-    e.preventDefault();
-
-    // create a reference to our db
-    const database = getDatabase(firebase);
-    const dbRef = ref(database, `user/${user?.userInfo.uid}/groceryList`);
-
-    const addToList: addToList = {
-      itemName: userInput,
-      exclude: [],
-      display: true
-    }
-
-     // push the value of the 'userInput' state to the database
-     push(dbRef, addToList);
- 
-     router.push(`/dashboard?serializedUser=${serializedUser}`);
-  }
-
-  return (
-    <div className="container m-auto">
-      <p>Welcome to my first project back from a year break.</p>
-      <br />
-      <p>The goal of this project is to help me get back into coding.</p>
-      <p>
-        With create react app deprecated, I will take this opportunity to learn
-        nextjs, typescript, and tailwind.
-      </p>
-      <br />
-      <p>My vision for this project:</p>
-      <p>
-        *First start off with creating a grocery list connecting it to firebase
-        as a database
-      </p>
-      <p>
-        *Second, compare grocery items that are on sale and display the cheapest
-        price along with the location
-      </p>
-      <p>
-        *Other features will be added as I go along, some ideas as of right now
-        is to limit which store we are comparing our grocery items. Since some
-        locations have restrictions. User Auth.
-      </p>
-      <br />
-      <p>Currently using axios to fetch API, will comeback and try new fetch from nextjs</p>
-      <br />
-      <p>Dashboard: </p>
-      <p>Grocery List - list of all gorcery items you want to purchase
-      </p>
-      <p>- if you have exluded an item a Exclude List button will show you have the option of adding it back to the on sale list</p>
-      <p>Grocery On Sale - list of all items that are currently on sale from based on your Grocery List</p>
-      <br />
-      <p>Add a grocery item page:</p>
-      <p>After entering an item it will populate the naming of the item that the flyers use ie. we say BROCCOLI which is BROCCOLI CROWNS</p>
-      <br />
-      <p>last update: Mar 25, 20204</p>
-      <br />
-
-      <Link href={{pathname: "/dashboard", query:{serializedUser: serializedUser, handleSubmit: handleAddGrocerySubmit}}}>Go to Dashboard2</Link>
-    </div >
-  );
+  return <h1>Hi</h1>;
 }

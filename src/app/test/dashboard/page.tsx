@@ -1,7 +1,7 @@
 "use client";
 
 import { getDatabase, onValue, ref } from "firebase/database";
-import firebase, { auth } from "../../firebase";
+import firebase, { auth } from "../../../firebase";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import GroceryItem from "@/components/GroceryItem";

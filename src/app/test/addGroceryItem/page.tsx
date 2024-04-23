@@ -1,7 +1,7 @@
 "use client";
 
 import { getDatabase, push, ref } from "firebase/database";
-import firebase from "../../firebase";
+import firebase from "../../../firebase";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import axios, { AxiosResponse } from "axios";
