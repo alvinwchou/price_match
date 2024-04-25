@@ -44,8 +44,8 @@ export default function Dashboard({ searchParams }: any) {
 
   const { serializedUser } = searchParams;
   // deserialize the query string back into an array of objects
-  const user = JSON.parse(decodeURIComponent(serializedUser));
-  console.log(user);
+  // const user = JSON.parse(decodeURIComponent(serializedUser));
+  // console.log(user);
 
   useEffect(() => {
     // check if the user is logged in already
