@@ -1,3 +1,4 @@
+"use client"
 import { db } from "@/firebase";
 import axios from "axios";
 import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
@@ -15,12 +16,19 @@ async function addItemsOfTheWeek(items: itemsProps[], storeName: string) {
   const groceryStoreSnapshot = await getDoc(groceryStoreRef);
   const groceryStoreDoc = groceryStoreSnapshot.data();
 
+  // check if this week has already been updated
   if (groceryStoreDoc?.[`${items[0].valid_from}`]) return;
 
-  // update database with flyer items
-  await updateDoc(groceryStoreRef, {
-    [items[0].valid_from]: items,
-  });
+  // check if store exist in database if so update database with flyer items else set database with flyer items
+  if (groceryStoreDoc) {
+    await updateDoc(groceryStoreRef, {
+      [items[0].valid_from]: items,
+    });
+  } else {
+    await setDoc(groceryStoreRef, {
+      [items[0].valid_from]: items,
+    });
+  }
 }
 
 export default function Dashboard() {
