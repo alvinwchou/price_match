@@ -1,4 +1,3 @@
-"use client"
 import { db } from "@/firebase";
 import axios from "axios";
 import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
