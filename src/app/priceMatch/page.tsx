@@ -1,14 +1,12 @@
-"use client";
-
 import { db } from "@/firebase";
 import { collection, getDocs } from "firebase/firestore";
-import GroceryListTable from "./_component/GroceryListTable";
+import PriceMatchComponent from "./_component/PriceMatchComponent";
 
 type GroceryItem = {
   id: string;
   itemName: string;
   checked: boolean;
-  priceMatchedItems?: GroceryStoreItem[];
+  priceMatchedItems: GroceryStoreItem[];
 };
 
 export default async function PriceMatch() {
@@ -25,34 +23,29 @@ export default async function PriceMatch() {
       id: doc.id,
       itemName: groceryListData.itemName,
       checked: groceryListData.checked,
+      priceMatchedItems: []
     };
 
     groceryList.push(groceryListItem);
   });
-  //   PriceMatchItems("WATERCRESS")
-  //   console.log(groceryList)
 
-  GetFilteredGroceryList(groceryList);
+  const priceMatchedGroceryList = await getPriceMatchedGroceryList(groceryList);
 
   return (
     <div>
       <div>
         <h1>Price Match</h1>
       </div>
-      <GroceryListTable groceryList={groceryList} />
-
-      {/* <GroceryListTable handleClick={handleClick} /> */}
-
-      {/* <PriceMatchItems itemName={itemName} /> */}
+      <PriceMatchComponent groceryList={priceMatchedGroceryList} />
     </div>
   );
 }
 
-async function GetFilteredGroceryList(originalGroceryList: GroceryItem[]) {
+async function getPriceMatchedGroceryList(originalGroceryList: GroceryItem[]) {
   const newGroceryListPromise = originalGroceryList.map(
     async (originalGroceryListItem) => {
-      // since CompareGroceryListItemToGroceryStore is an async function it wil return an array of promises we have to await map
-      return await CompareGroceryListItemToGroceryStore(
+      // since compareGroceryListItemToGroceryStore is an async function it wil return an array of promises we have to await map
+      return await compareGroceryListItemToGroceryStore(
         originalGroceryListItem
       );
     }
@@ -60,11 +53,15 @@ async function GetFilteredGroceryList(originalGroceryList: GroceryItem[]) {
 
   const newGroceryList = await Promise.all(newGroceryListPromise);
 
-  return newGroceryList.filter((item) => item !== null);
+  // filters out any empty index
+  const filteredNewGroceryList = newGroceryList.filter((item) => item);
+
+  return filteredNewGroceryList as GroceryItem[];
 }
 
 type GroceryStoreItem = {
   name: string;
+  clean_image_url: string;
   current_price: number;
   merchant_name: string;
   merchant_logo: string;
@@ -74,13 +71,14 @@ type GroceryStoreItem = {
   valid_to: string;
 };
 
-async function CompareGroceryListItemToGroceryStore(
+async function compareGroceryListItemToGroceryStore(
   groceryListItem: GroceryItem
 ) {
   const newGroceryListItem: GroceryItem = {
     id: groceryListItem.id,
     itemName: groceryListItem.itemName,
     checked: groceryListItem.checked,
+    priceMatchedItems: []
   };
   const allStorePriceMatchedItems: GroceryStoreItem[] = [];
   // create ref to GroceryStore
@@ -112,19 +110,5 @@ async function CompareGroceryListItemToGroceryStore(
     }
   });
   // only return if there is priceMatchedItems
-  console.log(groceryListItem.itemName);
   return newGroceryListItem.priceMatchedItems && newGroceryListItem;
 }
-
-// pass each groceryListItem in
-// check if grocery list items are in this week's flyer
-// if it is update groceryList and store flyer item in a new list
-
-// const groceryListItem = {
-//     id: doc.id,
-//     itemName: groceryListData.itemName,
-//     checked: groceryListData.checked,
-//     priceMatchedItems:
-//   };
-
-// return the item

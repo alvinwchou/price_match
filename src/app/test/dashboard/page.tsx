@@ -82,7 +82,7 @@ export default function Dashboard({ searchParams }: any) {
           setGroceryList(newState);
         });
       } else {
-        router.push("/signIn");
+        router.push("test/signIn");
       }
     });
   }, []);
@@ -112,7 +112,7 @@ export default function Dashboard({ searchParams }: any) {
             <Link
               href={{
                 pathname: "/addGroceryItem",
-                query: { uid: user.userInfo.uid },
+                query: { uid: "1JoQ6XFpMMQTf6hAACXI6TNux2M2" },
               }}
               className="px-4 border rounded mx-2 bg-white bg-opacity-50"
             >
