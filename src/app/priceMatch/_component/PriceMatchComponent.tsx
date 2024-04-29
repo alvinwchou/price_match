@@ -1,8 +1,9 @@
 "use client";
 
 import { db } from "@/firebase";
-import { collection, getDocs, query, where } from "firebase/firestore";
-import { useEffect, useState } from "react";
+import { doc, setDoc } from "firebase/firestore";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 type GroceryItem = {
   id: string;
@@ -37,7 +38,7 @@ export default function PriceMatchComponent({ groceryList }: GroceryListProps) {
   }
 
   return (
-    <div className="w-100border-2">
+    <div className="w-100 flex">
       <PriceMatchedGroceryListTable
         groceryList={groceryList}
         handleClick={handleClick}
@@ -58,7 +59,7 @@ function PriceMatchedGroceryListTable({
   handleClick: (itemIndex: number) => void;
 }) {
   return (
-    <div className="w-100border-2">
+    <div className="flex-1 w-50">
       {groceryList.map((groceryListItem, index) => {
         return (
           <div
@@ -89,58 +90,79 @@ function PriceMatchedItem({
   });
   console.log(sortedPriceMatchedItems);
 
-  return (
-    <div>
-      {/* cheapest of the week`` */}
-      <li className="p-4 border rounded bg-white bg-opacity-50">
-        {/* header */}
-        <div className="flex items-center mb-2 p2">
-          {/* image container */}
-          <div className="size-7 flex items-center">
-            <img
-              className="border rounded-full"
-              src={sortedPriceMatchedItems[0].merchant_logo}
-              alt={`${sortedPriceMatchedItems[0].merchant_name}'s logo`}
-            />
-          </div>
-          {/* text container */}
-          <div className="ml-1 flex justify-between items-baseline w-full">
-            <p className="font-medium">{sortedPriceMatchedItems[0].merchant_name}</p>
-            {/* <button
-              className="border rounded p-1 text-xs"
-              onClick={() => handleClick(id, name)}
-            >
-              Exclude
-            </button> */}
-          </div>
-        </div>
+  const router = useRouter();
 
-        {/* body */}
-        <div className="flex items-center gap-2">
-          {/* image container */}
-          <div className="w-1/3">
-            <img
-              className="w-full"
-              src={sortedPriceMatchedItems[0].clean_image_url}
-              alt={`Image of ${name}`}
-            />
-          </div>
-          {/* text container */}
-          <div className="w-2/3">
-            <p>{sortedPriceMatchedItems[0].name}</p>
-            <p>
-              {sortedPriceMatchedItems[0].current_price} {sortedPriceMatchedItems[0].post_price_text}
-            </p>
-            {/* {showEndsToday(valid_to) && (
+  async function addToGroceryList(itemName:string) {
+    // create ref to GroceryList
+    const groceryListRef = doc(db, "GroceryList", crypto.randomUUID());
+
+    // add to GroceryList
+    await setDoc(groceryListRef, {
+      itemName: itemName,
+      checked: false,
+    });
+
+    router.refresh()
+}
+
+  return (
+    <div className="flex-1 w-50 bg-white bg-opacity-50 h-80vh overflow-auto">
+      {/* cheapest of the week`` */}
+      {sortedPriceMatchedItems.map((item) => {
+        return (
+          <div className="p-4">
+            {/* header */}
+            <div className="flex items-center mb-2 p2">
+              {/* image container */}
+              <div className="size-7 flex items-center">
+                <img
+                  className="border rounded-full"
+                  src={item.merchant_logo}
+                  alt={`${item.merchant_name} logo`}
+                />
+              </div>
+              {/* text container */}
+              <div className="ml-1 flex justify-between items-baseline w-full">
+                <p className="font-medium">
+                  {item.merchant_name}
+                </p>
+                <button
+              className="border rounded p-1 text-xs"
+              onClick={() => addToGroceryList(item.name)}
+            >
+              Add to Grocery List
+            </button>
+              </div>
+            </div>
+
+            {/* body */}
+            <div className="flex items-center gap-2">
+              {/* image container */}
+              <div className="w-1/3">
+                <img
+                  className="w-full"
+                  src={item.clean_image_url}
+                  alt={`Image of ${name}`}
+                />
+              </div>
+              {/* text container */}
+              <div className="w-2/3">
+                <p>{item.name}</p>
+                <p>
+                  {item.current_price}{" "}
+                  {item.post_price_text}
+                </p>
+                {/* {showEndsToday(valid_to) && (
               <p className="text-red-500	">Ends today</p>
             )}
             {showStartsTomorrow(valid_from) && (
               <p className="text-slate-500	">Starts tomorrow</p>
             )} */}
+              </div>
+            </div>
           </div>
-        </div>
-      </li>
-      {/* the rest */}
+        );
+      })}
     </div>
   );
 }

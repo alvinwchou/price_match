@@ -1,5 +1,5 @@
 import { db } from "@/firebase";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, doc, getDocs, setDoc } from "firebase/firestore";
 import PriceMatchComponent from "./_component/PriceMatchComponent";
 
 type GroceryItem = {
@@ -31,12 +31,23 @@ export default async function PriceMatch() {
 
   const priceMatchedGroceryList = await getPriceMatchedGroceryList(groceryList);
 
+  async function addToGroceryList(itemName:string) {
+        // create ref to GroceryList
+        const groceryListRef = doc(db, "GroceryList", crypto.randomUUID());
+
+        // add to GroceryList
+        await setDoc(groceryListRef, {
+          itemName: itemName,
+          checked: false,
+        });
+  }
+
   return (
     <div>
       <div>
         <h1>Price Match</h1>
       </div>
-      <PriceMatchComponent groceryList={priceMatchedGroceryList} />
+      <PriceMatchComponent groceryList={priceMatchedGroceryList}/>
     </div>
   );
 }
@@ -91,7 +102,7 @@ async function compareGroceryListItemToGroceryStore(
   querySnapshot.forEach((doc) => {
     const groceryStoreDoc = doc.data();
 
-    // priceMatchedItem will be an array with object of the current week to find item names that contain grocery list item
+    // storePriceMatchedItem will be an array with object of the current week to find item names that contain grocery list item
     const storePriceMatchedItems = groceryStoreDoc[
       "2024-04-25T04:00:00+00:00"
     ]?.filter((item: { name: string }) =>
@@ -109,6 +120,6 @@ async function compareGroceryListItemToGroceryStore(
       newGroceryListItem.priceMatchedItems = allStorePriceMatchedItems;
     }
   });
-  // only return if there is priceMatchedItems
-  return newGroceryListItem.priceMatchedItems && newGroceryListItem;
+  // only return if there are priceMatchedItems
+  return newGroceryListItem.priceMatchedItems[0] && newGroceryListItem;
 }
