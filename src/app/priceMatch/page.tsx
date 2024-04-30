@@ -6,6 +6,7 @@ type GroceryItem = {
   id: string;
   itemName: string;
   checked: boolean;
+  excludeList: string[];
   priceMatchedItems: GroceryStoreItem[];
 };
 
@@ -23,7 +24,8 @@ export default async function PriceMatch() {
       id: doc.id,
       itemName: groceryListData.itemName,
       checked: groceryListData.checked,
-      priceMatchedItems: []
+      excludeList: groceryListData.excludeList,
+      priceMatchedItems: [],
     };
 
     groceryList.push(groceryListItem);
@@ -31,23 +33,12 @@ export default async function PriceMatch() {
 
   const priceMatchedGroceryList = await getPriceMatchedGroceryList(groceryList);
 
-  async function addToGroceryList(itemName:string) {
-        // create ref to GroceryList
-        const groceryListRef = doc(db, "GroceryList", crypto.randomUUID());
-
-        // add to GroceryList
-        await setDoc(groceryListRef, {
-          itemName: itemName,
-          checked: false,
-        });
-  }
-
   return (
     <div>
       <div>
         <h1>Price Match</h1>
       </div>
-      <PriceMatchComponent groceryList={priceMatchedGroceryList}/>
+      <PriceMatchComponent groceryList={priceMatchedGroceryList} />
     </div>
   );
 }
@@ -89,7 +80,8 @@ async function compareGroceryListItemToGroceryStore(
     id: groceryListItem.id,
     itemName: groceryListItem.itemName,
     checked: groceryListItem.checked,
-    priceMatchedItems: []
+    excludeList: groceryListItem.excludeList,
+    priceMatchedItems: [],
   };
   const allStorePriceMatchedItems: GroceryStoreItem[] = [];
   // create ref to GroceryStore
@@ -114,12 +106,19 @@ async function compareGroceryListItemToGroceryStore(
     if (storePriceMatchedItems?.length > 0) {
       // add all store into one variable
       storePriceMatchedItems.forEach((item: GroceryStoreItem) => {
-        allStorePriceMatchedItems.push(item);
+        // check if the item is apart of exclude list, if it is we skip it
+        if (
+          !groceryListItem.excludeList?.includes(item.name.toLocaleLowerCase())
+        ) {
+          allStorePriceMatchedItems.push(item);
+        }
       });
+
       // add to newGroceryListItem
       newGroceryListItem.priceMatchedItems = allStorePriceMatchedItems;
     }
   });
+
   // only return if there are priceMatchedItems
   return newGroceryListItem.priceMatchedItems[0] && newGroceryListItem;
 }

@@ -34,7 +34,6 @@ export default function PriceMatchComponent({ groceryList }: GroceryListProps) {
 
   // get the name of the grocery item in the list
   function handleClick(itemIndex: number) {
-    console.log(itemIndex);
     setItemIndex(itemIndex);
   }
 
@@ -106,7 +105,6 @@ function PriceMatchedItem({
   }
 
   async function addToExcludeList(itemId: string, itemName: string) {
-    console.log(itemId, itemName);
     // create GroceryList ref
     const groceryListItemRef = doc(db, "GroceryList", itemId);
     const groceryListItemRefSnapshot = await getDoc(groceryListItemRef)
@@ -116,11 +114,13 @@ function PriceMatchedItem({
     // get current excludeList and if not assign empty array
     const excludeListArray: string[] = groceryListItemDoc?.excludeList || []
 
-    excludeListArray.push(itemName)
+    excludeListArray.push(itemName.toLocaleLowerCase())
     
     await updateDoc(groceryListItemRef, { 
       excludeList: excludeListArray
     })
+
+    router.refresh();
   }
 
   return (
@@ -128,7 +128,7 @@ function PriceMatchedItem({
       {/* cheapest of the week`` */}
       {sortedPriceMatchedItems.map((item) => {
         return (
-          <div className="p-4">
+          <div className="p-4" key={item.clean_image_url}>
             {/* header */}
             <div className="flex items-center mb-2 p2">
               {/* image container */}
@@ -169,7 +169,7 @@ function PriceMatchedItem({
                 <img
                   className="w-full"
                   src={item.clean_image_url}
-                  alt={`Image of ${name}`}
+                  alt={`Image of ${item.name}`}
                 />
               </div>
               {/* text container */}
