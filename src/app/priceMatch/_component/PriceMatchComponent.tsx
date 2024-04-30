@@ -1,7 +1,8 @@
 "use client";
 
 import { db } from "@/firebase";
-import { doc, setDoc } from "firebase/firestore";
+import { update } from "firebase/database";
+import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -88,11 +89,10 @@ function PriceMatchedItem({
   ].priceMatchedItems.sort(function (a, b) {
     return a.current_price - b.current_price;
   });
-  console.log(sortedPriceMatchedItems);
 
   const router = useRouter();
 
-  async function addToGroceryList(itemName:string) {
+  async function addToGroceryList(itemName: string) {
     // create ref to GroceryList
     const groceryListRef = doc(db, "GroceryList", crypto.randomUUID());
 
@@ -102,8 +102,26 @@ function PriceMatchedItem({
       checked: false,
     });
 
-    router.refresh()
-}
+    router.refresh();
+  }
+
+  async function addToExcludeList(itemId: string, itemName: string) {
+    console.log(itemId, itemName);
+    // create GroceryList ref
+    const groceryListItemRef = doc(db, "GroceryList", itemId);
+    const groceryListItemRefSnapshot = await getDoc(groceryListItemRef)
+
+    const groceryListItemDoc = groceryListItemRefSnapshot.data()
+
+    // get current excludeList and if not assign empty array
+    const excludeListArray: string[] = groceryListItemDoc?.excludeList || []
+
+    excludeListArray.push(itemName)
+    
+    await updateDoc(groceryListItemRef, { 
+      excludeList: excludeListArray
+    })
+  }
 
   return (
     <div className="flex-1 w-50 bg-white bg-opacity-50 h-80vh overflow-auto">
@@ -123,15 +141,24 @@ function PriceMatchedItem({
               </div>
               {/* text container */}
               <div className="ml-1 flex justify-between items-baseline w-full">
-                <p className="font-medium">
-                  {item.merchant_name}
-                </p>
+                <p className="font-medium">{item.merchant_name}</p>
                 <button
-              className="border rounded p-1 text-xs"
-              onClick={() => addToGroceryList(item.name)}
-            >
-              Add to Grocery List
-            </button>
+                  className="border rounded p-1 text-xs"
+                  onClick={() => addToGroceryList(item.name)}
+                >
+                  Add to Grocery List
+                </button>
+                <button
+                  className="border rounded p-1 text-xs"
+                  onClick={() =>
+                    addToExcludeList(
+                      groceryList[selectedItemIndex].id,
+                      item.name
+                    )
+                  }
+                >
+                  Exclude from{" "}
+                </button>
               </div>
             </div>
 
@@ -149,8 +176,7 @@ function PriceMatchedItem({
               <div className="w-2/3">
                 <p>{item.name}</p>
                 <p>
-                  {item.current_price}{" "}
-                  {item.post_price_text}
+                  {item.current_price} {item.post_price_text}
                 </p>
                 {/* {showEndsToday(valid_to) && (
               <p className="text-red-500	">Ends today</p>
