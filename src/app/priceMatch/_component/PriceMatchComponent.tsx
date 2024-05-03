@@ -38,7 +38,7 @@ export default function PriceMatchComponent({ groceryList }: GroceryListProps) {
   }
 
   return (
-    <div className="w-100 flex">
+    <div className="flex gap-5">
       <PriceMatchedGroceryListTable
         groceryList={groceryList}
         handleClick={handleClick}
@@ -59,15 +59,15 @@ function PriceMatchedGroceryListTable({
   handleClick: (itemIndex: number) => void;
 }) {
   return (
-    <div className="flex-1 w-50">
+    <div className="flex-1 bg-white bg-opacity-50 border-y-2 border-slate-300 divide-y divide-slate-300">
       {groceryList.map((groceryListItem, index) => {
         return (
           <div
             key={groceryListItem.id}
-            className="flex justify-between border-8"
+            className="flex justify-between px-5 py-2"
             onClick={() => handleClick(index)}
           >
-            <p>{groceryListItem.itemName}</p>
+            <p className="text-transform: capitalize cursor-pointer">{groceryListItem.itemName}</p>
           </div>
         );
       })}
@@ -124,7 +124,7 @@ function PriceMatchedItem({
   }
 
   return (
-    <div className="flex-1 w-50 bg-white bg-opacity-50 h-80vh overflow-auto">
+    <div className="flex-1 bg-white bg-opacity-50 h-80vh overflow-auto">
       {/* cheapest of the week`` */}
       {sortedPriceMatchedItems.map((item) => {
         return (

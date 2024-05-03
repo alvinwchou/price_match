@@ -1,13 +1,16 @@
 import { db } from "@/firebase";
 import { collection, getDocs } from "firebase/firestore";
-import { AddGroceryListItem, DeleteGroceryListItem, ToggleGroceryListItems } from "./_component/GroceryListActions";
+import {
+  AddGroceryListItem,
+  DeleteGroceryListItem,
+  ToggleGroceryListItems,
+} from "./_component/GroceryListActions";
 
 export default function GroceryList() {
   return (
-    <div>
+    <div className="w-96 m-auto">
       <div>
         <h1>Grocery List</h1>
-        {/* <button><Link href="/testDashboard/groceryList/addItem">Add an Item</Link></button> */}
       </div>
 
       <AddGroceryListItem />
@@ -43,15 +46,25 @@ async function GroceryListTable() {
   });
 
   return (
-    <div className="w-100border-2">
+    // grocery list container
+    <div className="bg-white bg-opacity-50 border-y-2 border-slate-300 divide-y divide-slate-300">
       {groceryList.map((groceryListItem) => {
-        console.log("test",groceryListItem.id)
+        console.log("test", groceryListItem.id);
         return (
-          <div key={groceryListItem.id} className="flex justify-between border-8">
+          // each listed item
+          <div
+            key={groceryListItem.id}
+            className="flex justify-between px-5 py-2"
+          >
             <div className="flex">
-              <ToggleGroceryListItems id={groceryListItem.id} checked={groceryListItem.checked} />
+              <ToggleGroceryListItems
+                id={groceryListItem.id}
+                checked={groceryListItem.checked}
+              />
               <div>
-                <p>{groceryListItem.itemName}</p>
+                <p className="text-transform: capitalize">
+                  {groceryListItem.itemName}
+                </p>
               </div>
             </div>
             <DeleteGroceryListItem id={groceryListItem.id} />

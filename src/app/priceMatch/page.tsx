@@ -96,7 +96,7 @@ async function compareGroceryListItemToGroceryStore(
 
     // storePriceMatchedItem will be an array with object of the current week to find item names that contain grocery list item
     const storePriceMatchedItems = groceryStoreDoc[
-      "2024-04-25T04:00:00+00:00"
+      "2024-05-02T04:00:00+00:00"
     ]?.filter((item: { name: string }) =>
       item.name
         ?.toLowerCase()

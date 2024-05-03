@@ -16,7 +16,7 @@ export function AddGroceryListItem() {
 
     // add to GroceryList
     await setDoc(groceryListRef, {
-      itemName: groceryItemName,
+      itemName: groceryItemName?.toLocaleLowerCase(),
       checked: false,
     });
 
@@ -48,7 +48,7 @@ export function ToggleGroceryListItems({
 }) {
   const router = useRouter();
   return (
-    <div
+    <div className="pr-3 cursor-pointer"
       onClick={async () => {
         // create ref to GroceryList
         const groceryListRef = doc(db, "GroceryList", `${id}`);
@@ -70,7 +70,7 @@ export function DeleteGroceryListItem({ id }: { id: string }) {
   const router = useRouter();
 
   return (
-    <div
+    <div className="cursor-pointer"
       onClick={async () => {
         // create GroceryList ref
         const groceryListRef = doc(db, "GroceryList", `${id}`);
